@@ -47,8 +47,9 @@ class GetStarted extends StatelessWidget {
                       builder: (context) => const LoginOrRegister()),
                 );
               },
-              margin: EdgeInsets.symmetric(horizontal: 25),
+              margin: const EdgeInsets.symmetric(horizontal: 25),
               color: Theme.of(context).colorScheme.inversePrimary,
+              textcolor: Theme.of(context).colorScheme.background,
             ),
           ),
         ],

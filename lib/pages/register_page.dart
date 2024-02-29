@@ -33,21 +33,21 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            RoundedTextField(
+            const RoundedTextField(
               hintText: "Email",
               obscureText: false,
             ),
             const SizedBox(
               height: 25,
             ),
-            RoundedTextField(
+            const RoundedTextField(
               hintText: "Password",
               obscureText: true,
             ),
             const SizedBox(
               height: 25,
             ),
-            RoundedTextField(
+            const RoundedTextField(
               hintText: "Confirm password",
               obscureText: true,
             ),
@@ -55,11 +55,11 @@ class RegisterPage extends StatelessWidget {
               height: 25,
             ),
             RoundedButton(
-              text: "Sign up",
-              onTap: register,
-              margin: const EdgeInsets.symmetric(horizontal: 25),
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
+                text: "Sign up",
+                onTap: register,
+                margin: const EdgeInsets.symmetric(horizontal: 25),
+                color: Theme.of(context).colorScheme.inversePrimary,
+                textcolor: Theme.of(context).colorScheme.background),
             const SizedBox(
               height: 25,
             ),

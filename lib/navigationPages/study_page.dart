@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/course_container.dart';
 import 'package:study_buddy/components/subject_container.dart';
@@ -49,7 +48,7 @@ class StudyPage extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20.0),
                       ),
-                      child: TextField(
+                      child: const TextField(
                         decoration: InputDecoration(
                           hintText: 'Search',
                           contentPadding:
@@ -63,57 +62,53 @@ class StudyPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "In your courses",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Theme.of(context).colorScheme.inversePrimary),
-                ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "In your courses",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.inversePrimary),
               ),
             ),
           ),
-          Container(
+          SizedBox(
             height: 250,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: _post.length,
               itemBuilder: (context, index) {
-                return CourseContainer();
+                return const CourseContainer();
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Subjects",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Theme.of(context).colorScheme.inversePrimary),
-                ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Subjects",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.inversePrimary),
               ),
             ),
           ),
-          Container(
+          SizedBox(
             height: 120,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: _post.length,
               itemBuilder: (context, index) {
-                return SubjectContainer();
+                return const SubjectContainer();
               },
             ),
           ),

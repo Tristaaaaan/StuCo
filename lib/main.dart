@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:study_buddy/pages/home_page.dart';
+import 'package:study_buddy/pages/get_started.dart';
 import 'package:study_buddy/themes/light_mode.dart';
 
 void main() {
@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: const GetStarted(),
       theme: lightMode,
     );
   }

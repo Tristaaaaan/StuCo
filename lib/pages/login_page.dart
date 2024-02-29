@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:study_buddy/components/rounded_button.dart';
 import 'package:study_buddy/components/rounded_textfield.dart';
+import 'package:study_buddy/pages/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   // on Tap
   final void Function()? onTap;
 
-  LoginPage({
+  const LoginPage({
     super.key,
     required this.onTap,
   });
@@ -37,14 +36,14 @@ class LoginPage extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            RoundedTextField(
+            const RoundedTextField(
               hintText: "Email",
               obscureText: false,
             ),
             const SizedBox(
               height: 25,
             ),
-            RoundedTextField(
+            const RoundedTextField(
               hintText: "Password",
               obscureText: true,
             ),
@@ -52,11 +51,16 @@ class LoginPage extends StatelessWidget {
               height: 25,
             ),
             RoundedButton(
-              text: "Sign in",
-              onTap: register,
-              margin: const EdgeInsets.symmetric(horizontal: 25),
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
+                text: "Sign in",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
+                },
+                margin: const EdgeInsets.symmetric(horizontal: 25),
+                color: Theme.of(context).colorScheme.inversePrimary,
+                textcolor: Theme.of(context).colorScheme.background),
             const SizedBox(
               height: 25,
             ),
@@ -98,11 +102,11 @@ class LoginPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: RoundedButton(
-                    text: "Facebook",
-                    onTap: register,
-                    margin: const EdgeInsets.only(left: 25),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                      text: "Facebook",
+                      onTap: register,
+                      margin: const EdgeInsets.only(left: 25),
+                      color: Theme.of(context).colorScheme.primary,
+                      textcolor: Theme.of(context).colorScheme.inversePrimary),
                 ),
                 const SizedBox(
                   width: 10,
@@ -113,6 +117,7 @@ class LoginPage extends StatelessWidget {
                     onTap: register,
                     margin: const EdgeInsets.only(right: 25),
                     color: Theme.of(context).colorScheme.primary,
+                    textcolor: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
               ],
