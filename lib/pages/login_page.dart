@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/rounded_button.dart';
 import 'package:study_buddy/components/rounded_textfield.dart';
-import 'package:study_buddy/pages/home_page.dart';
+import 'package:study_buddy/services/auth/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   // on Tap
   final void Function()? onTap;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _pwController = TextEditingController();
 
-  const LoginPage({
+  LoginPage({
     super.key,
     required this.onTap,
   });
 
   void register() {}
+  // login method
+  void login(BuildContext context) async {
+    // auth service
+    final authService = AuthService();
+
+    //try login
+    try {
+      await authService.signInWithEmailPassword(
+        _emailController.text,
+        _pwController.text,
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(e.toString()),
+        ),
+      );
+    }
+    // catch any errors
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +59,17 @@ class LoginPage extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            const RoundedTextField(
+            RoundedTextField(
               hintText: "Email",
               obscureText: false,
+              controller: _emailController,
             ),
             const SizedBox(
               height: 25,
             ),
-            const RoundedTextField(
+            RoundedTextField(
               hintText: "Password",
+              controller: _pwController,
               obscureText: true,
             ),
             const SizedBox(
@@ -52,12 +77,7 @@ class LoginPage extends StatelessWidget {
             ),
             RoundedButton(
                 text: "Sign in",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
-                },
+                onTap: () => login(context),
                 margin: const EdgeInsets.symmetric(horizontal: 25),
                 color: Theme.of(context).colorScheme.inversePrimary,
                 textcolor: Theme.of(context).colorScheme.background),

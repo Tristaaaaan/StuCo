@@ -3,9 +3,13 @@ import 'package:study_buddy/components/rounded_button.dart';
 
 class StudyGroupContainer extends StatelessWidget {
   final void Function()? onTap;
+  final String title;
+  final String desc;
   const StudyGroupContainer({
     super.key,
     required this.onTap,
+    required this.title,
+    required this.desc,
   });
 
   void join() {}
@@ -32,27 +36,27 @@ class StudyGroupContainer extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Column(
               children: [
-                const Expanded(
+                Expanded(
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Math 51 Study Group",
-                            style: TextStyle(
+                            title,
+                            style: const TextStyle(
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            "Join this group to study math together!",
-                            style: TextStyle(fontSize: 16),
+                            desc,
+                            style: const TextStyle(fontSize: 16),
                           ),
-                          Text(
+                          const Text(
                             "Members: 15",
                             style: TextStyle(fontSize: 16),
                           ),

@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/category_container.dart';
 import 'package:study_buddy/components/search_bar.dart';
+import 'package:study_buddy/pages/create_study_group.dart';
 import 'package:study_buddy/pages/study_group_page.dart';
 
 class FindPage extends StatelessWidget {
   FindPage({super.key});
+
+  final Map<String, Widget> _pageMap = {
+    'Study Groups': const FindStudyGroup(),
+    'Tutors': const FindStudyGroup(),
+    'Create Study Group': CreateStudyGroup(),
+    'Courses': CreateStudyGroup(),
+  };
 
   final List _post = [
     'Study Groups',
@@ -58,7 +66,8 @@ class FindPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const FindStudyGroup()),
+                        builder: (context) => _pageMap[_post[index]]!,
+                      ),
                     );
                   },
                 );

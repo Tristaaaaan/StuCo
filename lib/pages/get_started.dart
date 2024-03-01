@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:study_buddy/auth/login_or_register.dart';
 import 'package:study_buddy/components/rounded_button.dart';
+import 'package:study_buddy/services/auth/login_or_register.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({super.key});
