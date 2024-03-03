@@ -19,14 +19,14 @@ class GroupService extends ChangeNotifier {
 
     // create a new Group Chat
     GroupChat newGroupChat = GroupChat(
-        creatorId: currentUserId,
-        creatorName: curreUserEmail,
-        studyGroupTitle: studyGrpTitle,
-        studyGroupDescription: studyGrpDesc,
-        timestamp: timestamp);
+      creatorId: currentUserId,
+      creatorName: curreUserEmail,
+      studyGroupTitle: studyGrpTitle,
+      studyGroupDescription: studyGrpDesc,
+      timestamp: timestamp,
+      members: [curreUserEmail],
+    );
     // construct a Group Chat ID
-
-    String studyGroupChatId = timestamp.toString();
 
     // add new data to database
     await _firestore.collection('study_groups').add(newGroupChat.toMap());

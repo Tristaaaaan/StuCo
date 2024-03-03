@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/study_group_container.dart';
+import 'package:study_buddy/pages/chat_page.dart';
 
 class FindStudyGroup extends StatefulWidget {
   const FindStudyGroup({super.key});
@@ -11,15 +12,37 @@ class FindStudyGroup extends StatefulWidget {
 
 class _FindStudyGroupState extends State<FindStudyGroup> {
   // List Document IDs
-  List<String> docIDs = [];
+  late List<Map<String, dynamic>> studyGroupList = [];
 
-  // get Document IDs
-  Future getDocId() async {
-    await FirebaseFirestore.instance.collection('study_groups').get().then(
+  late String groupChatId;
+
+  late Future<void> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = getDocId();
+  }
+
+  // get Data from database
+  Future<void> getDocId() async {
+    List<Map<String, dynamic>> tempList = [];
+    await FirebaseFirestore.instance
+        .collection('study_groups')
+        .orderBy('createdAt', descending: true)
+        .get()
+        .then(
           (snapshot) => snapshot.docs.forEach((document) {
-            docIDs.add(document.reference.id);
+            tempList.add({
+              'id': document.id,
+              'data': document.data(),
+            });
           }),
         );
+
+    setState(() {
+      studyGroupList = tempList;
+    });
   }
 
   @override
@@ -58,29 +81,43 @@ class _FindStudyGroupState extends State<FindStudyGroup> {
               ],
             ),
           ),
-          Expanded(
-              child: FutureBuilder(
-            future: getDocId(),
+          FutureBuilder(
+            future: _future,
             builder: (context, snapshot) {
-              return ListView.builder(
-                itemCount: docIDs.length,
-                itemBuilder: (context, index) {
-                  return StudyGroupContainer(
-                    title:
-                        "GA", // DataForGroupContainers(documentID: docIDs[index],),
-                    desc: "GA",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FindStudyGroup()),
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Expanded(
+                    child: Center(child: CircularProgressIndicator()));
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: studyGroupList.length,
+                    itemBuilder: (context, index) {
+                      String docId = studyGroupList[index]['id'];
+                      Map<String, dynamic> docData =
+                          studyGroupList[index]['data'];
+                      return StudyGroupContainer(
+                        title: docData["studyGrppTitle"] ?? "No Title",
+                        desc:
+                            docData["studyGrpDescription"] ?? "No Description",
+                        members: (docData["members"]?.length ?? 0).toString(),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                    groupChatId: docId,
+                                    chatName: docData["studyGrppTitle"])),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              );
+                  ),
+                );
+              }
             },
-          ))
+          )
         ],
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/rounded_button.dart';
 import 'package:study_buddy/components/rounded_textfield.dart';
@@ -8,7 +7,6 @@ class CreateStudyGroup extends StatelessWidget {
   final TextEditingController _grpNameController = TextEditingController();
   final TextEditingController _grpDescController = TextEditingController();
   final GroupService _groupService = GroupService();
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   CreateStudyGroup({super.key});
 
