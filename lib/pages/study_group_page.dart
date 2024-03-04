@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/study_group_container.dart';
 import 'package:study_buddy/pages/chat_page.dart';
+import 'package:study_buddy/services/group/group_services.dart';
 
 class FindStudyGroup extends StatefulWidget {
   const FindStudyGroup({super.key});
@@ -18,10 +20,23 @@ class _FindStudyGroupState extends State<FindStudyGroup> {
 
   late Future<void> _future;
 
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GroupService _groupService = GroupService();
+
   @override
   void initState() {
     super.initState();
     _future = getDocId();
+  }
+
+  void joinGroupChat(String chatId) async {
+    print("Joining group chat with chatId: $chatId");
+    await _groupService.checkAndAddUserEmail(
+      _firebaseAuth.currentUser!.email.toString(),
+      _firebaseAuth.currentUser!.uid,
+      chatId,
+    );
+    await getDocId();
   }
 
   // get Data from database
@@ -98,20 +113,20 @@ class _FindStudyGroupState extends State<FindStudyGroup> {
                       Map<String, dynamic> docData =
                           studyGroupList[index]['data'];
                       return StudyGroupContainer(
-                        title: docData["studyGrppTitle"] ?? "No Title",
-                        desc:
-                            docData["studyGrpDescription"] ?? "No Description",
-                        members: (docData["members"]?.length ?? 0).toString(),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ChatPage(
-                                    groupChatId: docId,
-                                    chatName: docData["studyGrppTitle"])),
-                          );
-                        },
-                      );
+                          title: docData["studyGrppTitle"] ?? "No Title",
+                          desc: docData["studyGrpDescription"] ??
+                              "No Description",
+                          members: (docData["members"]?.length ?? 0).toString(),
+                          onTap: () {
+                            joinGroupChat(docId);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatPage(
+                                      groupChatId: docId,
+                                      chatName: docData["studyGrppTitle"])),
+                            );
+                          });
                     },
                   ),
                 );

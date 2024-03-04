@@ -25,10 +25,63 @@ class GroupService extends ChangeNotifier {
       studyGroupDescription: studyGrpDesc,
       timestamp: timestamp,
       members: [curreUserEmail],
+      membersId: [currentUserId],
     );
     // construct a Group Chat ID
 
     // add new data to database
-    await _firestore.collection('study_groups').add(newGroupChat.toMap());
+    DocumentReference newGroupChatRef =
+        await _firestore.collection('study_groups').add(newGroupChat.toMap());
+    String groupChatId = newGroupChatRef.id;
+
+    // add a new collection
+    var data = {
+      "groupChatId": groupChatId,
+    };
+    _firestore
+        .collection("users")
+        .doc(currentUserId)
+        .collection("groupChats")
+        .add(
+          data,
+        );
+  }
+
+  // Join a Group Chat
+  Future<void> checkAndAddUserEmail(
+      String userEmail, String userID, String chatId) async {
+    // insert the current user to the group chat
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('study_groups')
+          .where('membersId', isEqualTo: userID)
+          .get();
+      print("Query result: ${querySnapshot.docs}");
+
+      if (querySnapshot.docs.isEmpty) {
+        print("Joining group chat with chatId: $chatId");
+        await FirebaseFirestore.instance
+            .collection('study_groups')
+            .doc(chatId)
+            .update({
+          'members': FieldValue.arrayUnion([userEmail]),
+          'membersId': FieldValue.arrayUnion([userID]),
+        });
+
+        var data = {
+          "groupChatId": chatId,
+        };
+        await _firestore
+            .collection("users")
+            .doc(userID)
+            .collection("groupChats")
+            .add(
+              data,
+            );
+        print("Update executed successfully");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
   }
 }

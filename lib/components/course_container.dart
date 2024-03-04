@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CourseContainer extends StatelessWidget {
   const CourseContainer({super.key});
@@ -12,7 +10,7 @@ class CourseContainer extends StatelessWidget {
       child: Container(
         height: 162,
         width: 200,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
             boxShadow: [
