@@ -24,8 +24,8 @@ class _HomePage extends State<HomePage> {
   final List<Widget> _pages = [
     StudyPage(),
     FindPage(),
-    ConnectPage(),
-    SavedPage(),
+    const ConnectPage(),
+    const SavedPage(),
     ProfilePage(),
   ];
 
@@ -37,7 +37,7 @@ class _HomePage extends State<HomePage> {
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
         type: BottomNavigationBarType.fixed,
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Study'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Find'),
           BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Check'),

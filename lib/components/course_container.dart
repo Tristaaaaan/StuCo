@@ -21,28 +21,26 @@ class CourseContainer extends StatelessWidget {
               )
             ], // changes position of
             borderRadius: BorderRadius.circular(24)),
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                height: 190,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    borderRadius: BorderRadius.circular(20)),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Hehe",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.background,
-                    ),
+        child: Column(
+          children: [
+            Container(
+              height: 190,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  borderRadius: BorderRadius.circular(20)),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Hehe",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.background,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
