@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/chat_bubble.dart';
 import 'package:study_buddy/components/chat_textfield.dart';
+import 'package:study_buddy/pages/chat_info.dart';
 import 'package:study_buddy/services/group/chat_services.dart';
 
 class ChatPage extends StatefulWidget {
@@ -26,13 +27,8 @@ class _ChatPageState extends State<ChatPage> {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  late Stream<QuerySnapshot<Object?>> _messages;
-
-  @override
-  void initState() {
-    super.initState();
-    _messages = getMessages(widget.groupChatId);
-  }
+  late final Stream<QuerySnapshot<Object?>> _messages =
+      getMessages(widget.groupChatId);
 
   Stream<QuerySnapshot<Object?>> getMessages(String groupChatId) {
     return _chatService.getMessages(groupChatId);
@@ -58,11 +54,18 @@ class _ChatPageState extends State<ChatPage> {
           title: Text(
             widget.chatName,
           ),
-          actions: const [
+          actions: [
             IconButton(
-              onPressed: null,
-              icon: Icon(
-                Icons.info,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ChatInfo(),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.info_outline,
               ),
             ),
           ],

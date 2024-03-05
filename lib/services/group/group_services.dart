@@ -37,6 +37,7 @@ class GroupService extends ChangeNotifier {
     // add a new collection
     var data = {
       "groupChatId": groupChatId,
+      "groupChatTitle": studyGrpTitle,
     };
     _firestore
         .collection("users")
@@ -52,7 +53,7 @@ class GroupService extends ChangeNotifier {
       String userEmail, String userID, String chatId) async {
     // insert the current user to the group chat
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      QuerySnapshot querySnapshot = await _firestore
           .collection('study_groups')
           .where('membersId', isEqualTo: userID)
           .get();

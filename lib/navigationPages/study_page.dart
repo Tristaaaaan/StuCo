@@ -1,17 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:study_buddy/components/course_container.dart';
 import 'package:study_buddy/components/subject_container.dart';
+import 'package:study_buddy/pages/chat_page.dart';
+import 'package:study_buddy/services/group/search.dart';
+import 'package:study_buddy/services/group/user_chats.dart';
 
-class StudyPage extends StatelessWidget {
-  StudyPage({super.key});
+class StudyPage extends StatefulWidget {
+  const StudyPage({super.key});
 
-  final List _post = [
-    'pos 1',
-    'pos 2',
-    'pos 3',
-    'pos 4',
-    'pos 5',
-  ];
+  @override
+  State<StudyPage> createState() => _StudyPageState();
+}
+
+class _StudyPageState extends State<StudyPage> {
+  final UserChats _userChats = UserChats();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  late final Stream<QuerySnapshot<Object?>> _groupChats = getUserGroupChatsId(
+    _firebaseAuth.currentUser!.uid,
+  );
+
+  Stream<QuerySnapshot<Object?>> getUserGroupChatsId(String groupChatId) {
+    return _userChats.getUserGroupChatsId(groupChatId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,41 +33,59 @@ class StudyPage extends StatelessWidget {
         children: [
           Container(
             height: 200,
-            width: MediaQuery.of(context).size.width,
-            color: Theme.of(context).colorScheme.inversePrimary,
-            child: Stack(
+            color: Theme.of(context).colorScheme.tertiaryContainer,
+            child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      child: Text(
                         "Find study groups and tutors",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.background,
-                          fontSize: 28,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontSize: 34,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      showSearch(
+                        context: context,
+                        delegate: CustomSearch(),
+                      );
+                    },
                     child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.0),
+                      padding: const EdgeInsets.all(
+                        10,
                       ),
-                      child: const TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 20.0),
-                          border: InputBorder.none,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background,
+                        borderRadius: BorderRadius.circular(
+                          20,
                         ),
+                      ),
+                      child: const Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "Search",
+                            ),
+                          ),
+                          Icon(
+                            Icons.search,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -79,11 +110,39 @@ class StudyPage extends StatelessWidget {
           ),
           SizedBox(
             height: 250,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _post.length,
-              itemBuilder: (context, index) {
-                return const CourseContainer();
+            child: StreamBuilder(
+              stream: _groupChats,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                      child: Expanded(child: CircularProgressIndicator()));
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot doc = snapshot.data!.docs[index];
+                      Map<String, dynamic> data =
+                          doc.data() as Map<String, dynamic>;
+                      return CourseContainer(
+                        titleText: data["groupChatTitle"],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatPage(
+                                chatName: data["groupChatTitle"],
+                                groupChatId: data["groupChatId"],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -106,7 +165,6 @@ class StudyPage extends StatelessWidget {
             height: 120,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _post.length,
               itemBuilder: (context, index) {
                 return const SubjectContainer();
               },
