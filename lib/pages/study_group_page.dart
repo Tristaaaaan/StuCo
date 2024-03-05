@@ -48,10 +48,14 @@ class _FindStudyGroupState extends State<FindStudyGroup> {
         .get()
         .then(
           (snapshot) => snapshot.docs.forEach((document) {
-            tempList.add({
-              'id': document.id,
-              'data': document.data(),
-            });
+            List<dynamic> memberId = document.data()['membersId'] ?? [];
+
+            if (!memberId.contains(_firebaseAuth.currentUser!.uid)) {
+              tempList.add({
+                'id': document.id,
+                'data': document.data(),
+              });
+            }
           }),
         );
 
@@ -63,39 +67,22 @@ class _FindStudyGroupState extends State<FindStudyGroup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Container(
-            height: 135,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.tertiary,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                const Row(
-                  children: [
-                    CircleAvatar(),
-                    Icon(Icons.search),
-                  ],
-                ),
-                Text(
-                  "Study Groups",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+      appBar: AppBar(
+        title: const Text(
+          "Study Groups",
+        ),
+        centerTitle: true,
+        actions: const [
+          IconButton(
+            onPressed: null,
+            icon: Icon(
+              Icons.search,
             ),
           ),
+        ],
+      ),
+      body: Column(
+        children: [
           FutureBuilder(
             future: _future,
             builder: (context, snapshot) {

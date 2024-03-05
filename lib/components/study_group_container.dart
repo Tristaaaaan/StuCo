@@ -6,6 +6,7 @@ class StudyGroupContainer extends StatelessWidget {
   final String title;
   final String desc;
   final String members;
+
   const StudyGroupContainer({
     super.key,
     required this.onTap,
